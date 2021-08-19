@@ -1,3 +1,3 @@
 module.exports = {
-  Task: require('./task'),
+  task: require('./task.model'),
 };

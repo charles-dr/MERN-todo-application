@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const appConfig = require('./config');
@@ -20,12 +21,26 @@ app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', '*');
   next();
 });
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
+// routers
+app.use('/tasks', require('./routes/task.routes'));
 
 
 app.get('/ping', (req, res) => res.send('Pong!'));
 
 app.use((req, res, next) => {
-  return res.status(404).send('Not Found');
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {},
+  });
 });
 
 app.listen(appConfig.port, () => console.log(`[Server] running on port ${appConfig.port}`));
