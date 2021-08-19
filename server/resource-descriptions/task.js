@@ -1,4 +1,5 @@
 const { domain } = require('../config');
+const models = require('../models');
 
 module.exports = {
   urlTemplates: {
@@ -8,7 +9,9 @@ module.exports = {
   beforeSave: (resource, meta, extras, superFn) => {
     return resource;
   },
-  beforeRender: (resource, meta, extras, superFn) => {
+  beforeRender: async (resource, meta, extras, superFn) => {
+    // console.log('[Id]', resource.id, resource.type)
+    resource.attributes.children = [];
     return resource;
   },
 };

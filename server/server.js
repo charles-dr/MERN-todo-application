@@ -49,9 +49,17 @@ app.route('/:type(tasks)/:id')
   .patch(apiReqHandler)
   .delete(apiReqHandler);
 
+app.get('/:type(tasks)/subtasks', Front.customAPIRequest({
+  queryFactory: async (opts) => {
+    // console.log('[Opts]', opts.request.id);
+    const originQuery = await opts.makeQuery(opts);
+    return originQuery;//.andWhere({ field: 'status', operator: 'eq', value: true })
+  }
+}));
+
 
 app.use((req, res, next) => {
-  Front.sendError(new APIError(404, undefiend, 'Not Found'), req, res);
+  Front.sendError(new APIError(404, undefined, 'Not Found'), req, res);
 });
 
 app.listen(appConfig.port, () => console.log(`[Server] running on port ${appConfig.port}`));
