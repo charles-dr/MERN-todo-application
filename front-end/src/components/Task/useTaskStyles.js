@@ -2,7 +2,7 @@ import { createUseStyles } from 'react-jss';
 
 const useTaskStyles = createUseStyles({
   container: {
-    border: '1px solid #000',
+    border: '1px solid #d4d4d4',
     margin: '1rem 0 0 0',
     padding: '0.5rem 0.5rem 0 0.5rem',
   },
