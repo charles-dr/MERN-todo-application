@@ -28,4 +28,21 @@ router.route('/').post((req, res) => {
     .then(task => res.send(converters.task.serializer.serialize(task)));
 });
 
+router.route('/:id').patch((req, res) => {
+  const { data: { attributes } } = req.body;
+  console.log('[Attributes]', attributes, req.params.id);
+  return Promise.all([
+    models.task.findOne({ _id: req.params.id }),
+  ])
+    .then(([task]) => {
+      // now update the value in attributes.
+      task.status = attributes.status;
+      return Promise.all([
+        task.save(),
+        models.subtask.updateMany({ parent: req.params.id }, { status: attributes.status }),
+      ]);
+    })
+    .then(([task]) => res.send(converters.task.serializer.serialize(task)));
+})
+
 module.exports = router;

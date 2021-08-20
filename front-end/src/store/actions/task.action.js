@@ -6,26 +6,34 @@ import {
 } from '../store.constant';
 import * as api from '../../api';
 
+const loadTaskAndDispatch = (dispatch) => {
+  return api.getTasks()
+    .then(tasks => dispatch({
+      type: LOADED_TASKS,
+      payload: tasks,
+    }));
+}
+
 export const createTask = (title) => {
   return async dispatch => {
     return api.createTask(title)
-      .then((task) => api.getTasks())
-      .then((tasks) => dispatch({
-        type: LOADED_TASKS,
-        payload: tasks,
-      }));
+      .then((task) => loadTaskAndDispatch(dispatch));
   }
 }
 
 export const loadTasks = () => {
   return async dispatch => {
     return api.getTasks()
-      .then(tasks => {
-        console.log('[Redux][Action] Tasks loaded', tasks);
-        dispatch({
-          type: LOADED_TASKS,
-          payload: tasks,
-        })
-      });
+      .then(tasks => dispatch({
+        type: LOADED_TASKS,
+        payload: tasks,
+      }));
+  }
+}
+
+export const updateTask = (id, status) => {
+  return async dispatch => {
+    return api.updateTask(id, status)
+      .then(task => loadTaskAndDispatch(dispatch));
   }
 }

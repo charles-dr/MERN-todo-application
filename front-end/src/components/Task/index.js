@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux';
 import { Checkbox, Grid, Typography } from '@material-ui/core';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 
+import { updateTask } from '../../store/actions';
 import Subtask from '../Subtask';
 import AddSubtaskForm from '../AddSubtaskForm';
 import useTaskStyles from './useTaskStyles';
 
-const Task = ({ task }) => {
+const Task = ({ task, $updateTask }) => {
   const classes = useTaskStyles();
   const [showSubTasks, toggleSubtaskShow] = useState(false);
   const handleChange = (e) => {
-
+    $updateTask(task.id, !task.status);
   }
 
   return (
@@ -48,4 +50,9 @@ const Task = ({ task }) => {
   );
 }
 
-export default Task;
+const mapState2Props = (state) => ({});
+const mapDispatch2Props = {
+  $updateTask: updateTask,
+};
+
+export default connect(mapState2Props, mapDispatch2Props)(Task);

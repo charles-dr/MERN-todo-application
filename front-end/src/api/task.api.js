@@ -15,3 +15,11 @@ export const createTask = (title) => {
       return converters.task.deserializer.deserialize(data);
     });
 }
+
+export const updateTask = async (id, status) => {
+  const jsonapi = converters.task.serializer.serialize({ id, status });
+  return apiInstance.patch(`/tasks/${id}`, jsonapi)
+    .then(({ data, status }) => {
+      return converters.task.deserializer.deserialize(data);
+    });
+}
