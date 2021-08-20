@@ -1,12 +1,14 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import { Checkbox, Grid, Typography } from '@material-ui/core';
 
+import { updateSubtask } from '../../store/actions';
 import useSubtaskStyles from './useSubtaskStyles';
 
-const Subtask = ({ subtask }) => {
+const Subtask = ({ subtask, $updateSubtask }) => {
   const classes = useSubtaskStyles();
   const handleChange = (e) => {
-
+    $updateSubtask(subtask.id, !subtask.status);
   }
 
   return (
@@ -26,4 +28,9 @@ const Subtask = ({ subtask }) => {
   );
 }
 
-export default Subtask;
+const mapState2Props = (state) => ({});
+const mapDispatch2Props = {
+  $updateSubtask: updateSubtask,
+}
+
+export default connect(mapState2Props, mapDispatch2Props)(Subtask);

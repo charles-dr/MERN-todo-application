@@ -25,7 +25,27 @@ router.route('/:id').get((req, res) => {
     .then(subtask => {
       return res.send(converters.subtask.serializer.serialize(subtask))
     });
-})
+});
+
+/**
+ * @description update a task status
+ */
+router.route('/:id').patch((req, res) => {
+  return Promise.all([
+    converters.subtask.deserializer.deserialize(req.body),
+    models.subtask.findOne({ _id: req.params.id }),
+  ])
+    .then(([data, subtask]) => {
+      console.log('[Deserialized]', subtask);
+      subtask.status = data.status;
+      return subtask.save();
+    })
+    .then(async subtask => {
+      await activity.updateParentSubtasks(subtask.task);
+      return models.subtask.findOne({ _id: subtask._id }).populate('task');
+    })
+    .then(subtask => res.send(converters.subtask.serializer.serialize(subtask)));
+});
 
 /**
  * @description create a subtask
