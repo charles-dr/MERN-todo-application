@@ -1,22 +1,22 @@
 const { Serializer, Deserializer } = require('jsonapi-serializer');
 
 module.exports = {
-  serializer: new Serializer('tasks', {
+  serializer: new Serializer('subtasks', {
     topLevelLinks: {
       self: (records) => {
-        return records.length !== undefined ? '/tasks' : `/tasks/${records.id}`;
+        return records.length !== undefined ? '/subtasks' : `/subtasks/${records.id}`;
       },
     },
     attributes: [
       'title',
       'status',
-      'subtasks',
+      'parent',
       'created_at',
     ],
-    subtasks: {
+    parent: {
       ref: 'id',
-      included: true,
-      attributes: ['title', 'status'],
+      included: false,
+      // attributes: ['status'],
     },
   }),
   deserializer: new Deserializer({

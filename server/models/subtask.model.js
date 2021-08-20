@@ -10,12 +10,10 @@ const schema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  subtasks: {
-    type: [{
-      ref: 'Subtask',
-      type: ObjectId,
-    }],
-    default: [],
+  parent: {
+    ref: 'Task',
+    type: ObjectId,
+    default: null,
   },
   created_at: {
     type: Date,
@@ -23,4 +21,4 @@ const schema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Task', schema);
+module.exports = mongoose.model('Subtask', schema);

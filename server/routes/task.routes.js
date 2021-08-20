@@ -5,14 +5,19 @@ const router = express.Router();
 
 router.route('/:id').get((req, res) => {
   const { serializer } = converters.task;
-  return models.task.findOne({ _id: req.params.id }).populate('parent')
+  return models.task.findOne({ _id: req.params.id })
     .then(task => res.send(serializer.serialize(task)));
 });
 
+router.route('/:id/subtasks').get((req, res) => {
+  const { serializer } = converters.subtask;
+  return models.subtask.find({ parent: req.params.id })
+    .then(subtasks => res.send(serializer.serialize(subtasks)));
+});
+
 router.route('/').get((req, res) => {
-  return models.task.find()
+  return models.task.find({ parent: null }).populate('subtasks')
     .then(tasks => {
-      console.log('[Tasks]', tasks.length);
       return res.send(converters.task.serializer.serialize(tasks));
     })
 });
