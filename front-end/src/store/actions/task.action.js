@@ -9,10 +9,11 @@ import * as api from '../../api';
 export const createTask = (title) => {
   return async dispatch => {
     return api.createTask(title)
-      .then(task => {
-        console.log('[Task] created', task);
-        dispatch({ type: LOAD_TASKS });
-      })
+      .then((task) => api.getTasks())
+      .then((tasks) => dispatch({
+        type: LOADED_TASKS,
+        payload: tasks,
+      }));
   }
 }
 

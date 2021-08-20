@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
+
 
 const appConfig = require('./config');
 const models = require('./models');
@@ -18,7 +20,7 @@ mongoose.connect(appConfig.dbURL, appConfig.dbOptions, (error) => {
   }
 });
 
-
+app.use(cors());
 app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', '*');
   next();

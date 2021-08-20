@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Button,
   FormControl,
@@ -8,12 +9,15 @@ import {
   InputLabel,
 } from '@material-ui/core';
 
+import { createTask } from '../../store/actions'
 
-const AddTaskForm = () => {
+
+const AddTaskForm = ({ $createTask }) => {
   const [title, setTitle] = useState('');
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('data', title);
+    $createTask(title);
+    setTitle('');
   }
   return (
     <>
@@ -47,4 +51,9 @@ const AddTaskForm = () => {
   );
 }
 
-export default AddTaskForm;
+const mapState2Props = (state) => ({});
+const mapDispatch2Props = {
+  $createTask: createTask,
+}
+
+export default connect(mapState2Props, mapDispatch2Props)(AddTaskForm);

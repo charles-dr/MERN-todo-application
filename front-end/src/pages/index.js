@@ -1,53 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as api from '../api';
+import { loadTasks } from '../store/actions';
 import { DefaultLayout } from '../layouts/DefaultLayout';
 import AddTaskForm from '../components/AddTaskForm';
 import Task from '../components/Task';
 
-class HomePage extends React.Component {
-  state = {
-    tasks: [],
-  };
-  constructor(props) {
-    super();
-    this.state = {
-      tasks: props.tasks,
-    };
-  }
-  componentDidMount() {
-    console.log('[HomePage]');
-    // this.loadTasks();
-    this.createTask();
-  }
-  loadTasks() {
-    return api.getTasks()
-      .then(data => {
-        console.log('[Tasks] Loaded.', data);
-        this.setState({ ...this.state, tasks: data });
-      })
-  }
-  createTask() {
-    const title = Date.now().toString();
-    const jsonapi = api.createTask(title);
-    console.log('[json api]', jsonapi);
-  }
-  render() {
-    return (
-      <DefaultLayout>
-        <AddTaskForm />
-        {
-          this.state.tasks.length > 0 && this.state.tasks.map((task, i) => (
-            <Task task={task} key={i} />
-          ))
-        }
-      </DefaultLayout>
-    );    
-  }
+const HomePage = ({ tasks, $loadTasks }) => {
+  React.useEffect(() => {
+    $loadTasks();
+    return () => {}
+  // eslint-disable-next-line
+  }, []);
+  return (
+    <DefaultLayout>
+      <AddTaskForm />
+      {
+        tasks.length > 0 && tasks.map((task, i) => (
+          <Task task={task} key={i} />
+        ))
+      }
+    </DefaultLayout>
+  );
 }
 
 const mapState2Props = ({ task }) => ({ tasks: task.tasks });
+const mapDispatch2Props = {
+  $loadTasks: loadTasks,
+};
 
-
-export default connect(mapState2Props)(HomePage);
+export default connect(mapState2Props, mapDispatch2Props)(HomePage);
