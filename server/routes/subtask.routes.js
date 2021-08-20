@@ -28,7 +28,7 @@ router.route('/:id').get((req, res) => {
 });
 
 /**
- * @description update a task status
+ * @description update a subtask status
  */
 router.route('/:id').patch((req, res) => {
   return Promise.all([
@@ -47,6 +47,19 @@ router.route('/:id').patch((req, res) => {
 });
 
 /**
+ * @description delete a subtask by id.
+ */
+router.route('/:id').delete((req, res) => {
+  return models.subtask.findOne({ _id: req.params.id })
+    .then(subtask => {
+      const taskId = subtask.task;
+      return models.subtask.deleteMany({ _id: subtask._id })
+        .then(() => activity.updateParentSubtasks(taskId));
+    })
+    .then(() => res.status(204).send(''));
+});
+
+/**
  * @description create a subtask
  */
 router.route('/').post((req, res) => {
@@ -58,7 +71,7 @@ router.route('/').post((req, res) => {
       models.subtask.findOne({ _id: subtask._id }).populate('task'),
       activity.updateParentSubtasks(subtask.task),
     ]))
-    .then(([subtask]) => res.send(converters.subtask.serializer.serialize(subtask)));
+    .then(([subtask]) => res.status(201).send(converters.subtask.serializer.serialize(subtask)));
 });
 
 module.exports = router;

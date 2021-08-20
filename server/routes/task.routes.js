@@ -3,9 +3,15 @@ const models = require('../models');
 const converters = require('../converters');
 const router = express.Router();
 
-router.route('/:id').get((req, res) => models.task.findOne({ _id: req.params.id }).populate('subtasks')
-  .then(task => res.send(converters.task.serializer.serialize(task)))
-)
+router.route('/:id').get((req, res, next) => models.task.findOne({ _id: req.params.id }).populate('subtasks')
+  .then(task => {
+    if (!task) {
+      const err = new Error(`Task with id "${req.params.id}" does not exist!`);
+      err.status = 404;
+      return next(err);
+    }
+    res.send(converters.task.serializer.serialize(task));
+  }));
   
 
 /**
@@ -44,6 +50,17 @@ router.route('/:id').patch((req, res) => {
       ]);
     })
     .then(([task]) => res.send(converters.task.serializer.serialize(task)));
-})
+});
+
+/**
+ * @description delete a task by id.
+ */
+router.route('/:id').delete((req, res) => {
+  return Promise.all([
+    models.task.deleteMany({ _id: req.params.id }),
+    models.subtask.deleteMany({ task: req.params.id }),
+  ])
+    .then(() => res.status(204).send(''));
+});
 
 module.exports = router;
