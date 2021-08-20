@@ -12,5 +12,8 @@ export const getTasks = () => {
 
 export const createTask = (title) => {
   const jsonapi = converters.task.serializer.serialize({ title });
-  return jsonapi;
+  return apiInstance.post('/tasks', jsonapi)
+    .then(({ data, res }) => {
+      return converters.task.deserializer.deserialize(data);
+    });
 }

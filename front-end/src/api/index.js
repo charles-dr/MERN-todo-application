@@ -11,4 +11,5 @@ const apiInstance = axios.create({
 
 export { apiInstance };
 export * from './task.api';
+export * from './subtask.api';
 

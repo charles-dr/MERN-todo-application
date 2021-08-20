@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import * as api from '../api';
 import { DefaultLayout } from '../layouts/DefaultLayout';
@@ -11,13 +12,13 @@ class HomePage extends React.Component {
   };
   constructor(props) {
     super();
-    // this.state = {
-    //   tasks: [],
-    // };
+    this.state = {
+      tasks: props.tasks,
+    };
   }
   componentDidMount() {
     console.log('[HomePage]');
-    this.loadTasks();
+    // this.loadTasks();
     this.createTask();
   }
   loadTasks() {
@@ -44,7 +45,9 @@ class HomePage extends React.Component {
       </DefaultLayout>
     );    
   }
-
 }
 
-export default HomePage;
+const mapState2Props = ({ task }) => ({ tasks: task.tasks });
+
+
+export default connect(mapState2Props)(HomePage);

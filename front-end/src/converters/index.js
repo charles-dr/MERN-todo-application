@@ -10,19 +10,40 @@ export const task = {
     attributes: [
       'title',
       'status',
-      'parent',
       'subtasks',
       'created_at',
     ],
-    parent: {
-      ref: 'id',
-      included: true,
-      // attributes: ['status'],
-    },
     subtasks: {
       ref: 'id',
       included: true,
       attributes: ['title', 'status'],
+    },
+  }),
+  deserializer: new Deserializer({
+    tasks: {
+      valueForRelationship: (relationship) => {
+        return relationship.id
+      },
+    }
+  }),
+};
+
+export const subtask = {
+  serializer: new Serializer('subtasks', {
+    topLevelLinks: {
+      self: (records) => {
+        return records.length !== undefined ? '/subtasks' : `/subtasks/${records.id}`;
+      },
+    },
+    attributes: [
+      'title',
+      'status',
+      'parent',
+      'created_at',
+    ],
+    parent: {
+      ref: 'id',
+      included: false,
     },
   }),
   deserializer: new Deserializer({
