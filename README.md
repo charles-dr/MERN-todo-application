@@ -2,12 +2,38 @@
 
 This is a MERN stack application to create & manage to-do list.
 
+
+## Summary of tech stacks
+### front-end
+
+- React.js
+
+### back-end
+
+- Node.js, Express.js
+
+### Database
+
+- Mongodb, mongoose
+
+
 ## How to run the application on local
 
 ### server
 
+```bash
+cd server  # enter the folder
+yarn install # install dependencies
+yarn dev # start development server
+```
+
 ### front-end
 
+```bash
+cd front-end # enter the folder
+yarn install # install dependencies
+yarn start # run the app in development mode.
+```
 
 ## Data Model
 
@@ -18,6 +44,7 @@ This is a MERN stack application to create & manage to-do list.
   "id": "[String]",
   "title": "[String]",
   "status": "[Boolean]",
+  "subtasks": "[Array<ID>]",
   "created_at": "[Date | Timestamp]"
 }
 ```
@@ -29,76 +56,7 @@ This is a MERN stack application to create & manage to-do list.
   "id": "[String]",
   "title": "[String]",
   "status": "[Boolean]",
+  "task": "[ID]",
   "created_at": "[Date | Timestamp]",
 }
 ```
-
-## API Endpoints
-
-### [GET] /tasks - get a list of the todo's
-
-- response
-```json
-{
-  "id": "[String]",
-  "title": "[String]",
-  "status": "[Boolean]",
-  "created_at": "[Timestamp]",
-  "subtasks": "[Array<Subtask>]"
-}
-```
-
-### [POST] /tasks - create a task
-
-- request body
-
-```json
-{ "title": "[String]" }
-```
-
-- response
-
-returns a task.
-
-### [PUT] /tasks/:id/status - update the status of a task by id.
-
-- Request Body
-```json
-{
-  "status": "[Boolean]"
-}
-```
-
-- Response
-returns the updated task.
-
-### [POST] /subtasks - create a subtask in a task.
-
-- Request Body
-```json
-{
-  "title": "[String]",
-  "todo_id": "[String]"
-}
-```
-
-- Response
-returns the new subtask.
-
-### [PUT] /subtask/:id/status - update the status of a subtask by id.
-
-- Request Body
-
-```json
-{
-  "status": "[Boolean]"
-}
-```
-
-- Response
-returns the updated subtask.
-
-
-
-
-

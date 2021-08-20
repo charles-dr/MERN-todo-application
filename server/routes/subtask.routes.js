@@ -36,7 +36,6 @@ router.route('/:id').patch((req, res) => {
     models.subtask.findOne({ _id: req.params.id }),
   ])
     .then(([data, subtask]) => {
-      console.log('[Deserialized]', subtask);
       subtask.status = data.status;
       return subtask.save();
     })
