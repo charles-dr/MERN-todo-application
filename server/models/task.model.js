@@ -15,6 +15,13 @@ const schema = mongoose.Schema({
     type: ObjectId,
     default: null,
   },
+  subtasks: {
+    type: [{
+      ref: 'Task',
+      type: ObjectId,
+    }],
+    default: [],
+  },
   created_at: {
     type: Date,
     default: Date.now,

@@ -11,6 +11,7 @@ module.exports = {
       'title',
       'status',
       'parent',
+      'subtasks',
       'created_at',
     ],
     parent: {
