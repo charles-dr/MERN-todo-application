@@ -8,12 +8,8 @@ var testTaskId = null;
 var testSubtaskId = null;
 var createdTaskId = null;
 var createdSubtaskId = null;
-// beforeAll(async () => {
-//   // do something here.
-// });
 
-beforeEach(async () => {
-  // do something here.
+const createTestTask = async () => {
   const title = 'Test Task ' + Date.now().toString();
   const jsonapi = converters.task.serializer.serialize({ title });
   const response = await request(app)
@@ -24,23 +20,64 @@ beforeEach(async () => {
   expect(response.statusCode).toBe(200);
   expect(response.body).toHaveProperty('data');
   expect(response.body.data).toHaveProperty('id');
-  // remember the temporary task ID. It will be deleted later.
+  // remember the temporary task ID.
   testTaskId = response.body.data.id;
+}
+
+const createTestSubtask = async () => {
+  const payload = {
+    task: { id: testTaskId, type: 'tasks' },
+    title: 'Temp Subtask ' + Date.now().toString()
+  };
+  const jsonapi = converters.subtask.serializer.serialize(payload);
+  // create a subtask;
+  const response = await request(app)
+    .post('/subtasks')
+    .set('Content-Type', 'application/vnd.api+json')
+    .set('Accept', 'application/vnd.api+json')
+    .send(jsonapi);
+  // status code should be 201.
+  expect(response.statusCode).toBe(201);
+
+  const newSubtask = await converters.subtask.deserializer.deserialize(response.body);
+  // check the parent ID.
+  expect(newSubtask).toHaveProperty('task');
+  expect(newSubtask.task).toBe(testTaskId);
+  // remember the subtask ID.
+  expect(newSubtask).toHaveProperty('id');
+  testSubtaskId = newSubtask.id;
+}
+
+beforeAll(async () => {
+  //--- create a temp task.
+  await createTestTask();
+  //--- create a subtask for [Patch] /subtasks/:id
+  await createTestSubtask();
 });
 
-afterEach(async () => {
-  // do something here.
-});
+beforeEach(async () => {});
+
+afterEach(async () => {});
 
 afterAll(async () => {
+  // deleted the subtask from 'POST /subtasks'.
+  if (createdSubtaskId) {
+    const response = await request(app).delete(`/subtasks/${createdSubtaskId}`);
+    expect(response.statusCode).toBe(204);
+  }
+  // deleted the temp subtask for 'PATCH /subtasks/:id'.
+  if (testSubtaskId) {
+    const response = await request(app).delete(`/subtasks/${testSubtaskId}`);
+    expect(response.statusCode).toBe(204);
+  }
+  // remove the temp task.
+  if (testTaskId) {
+    const response = await request(app).delete(`/tasks/${testTaskId}`);
+    expect(response.statusCode).toBe(204);
+  }
   // delete the task created for 'POST /tasks'.
   if (createdTaskId) {
     const response = await request(app).delete(`/tasks/${createdTaskId}`);
-    expect(response.statusCode).toBe(204);
-  }
-  // deleted the subtask for 'POST /subtasks'.
-  if (createdSubtaskId) {
-    const response = await request(app).delete(`/subtasks/${createdSubtaskId}`);
     expect(response.statusCode).toBe(204);
   }
   mongoose.connection.close();
@@ -112,15 +149,14 @@ describe("PATCH /tasks/:id", () => {
     const updatedTask = await converters.task.deserializer.deserialize(updatedRaw.body);
     // status should be updated.
     expect(updatedTask.status).toBe(!targetTask.status);
-    testTaskId = updatedTask.id;
   });
 });
 
 describe("POST /subtasks", () => {
   test("It should create a new subtask under the last task.", async () => {
     const payload = {
-      task: testTaskId,
-      title: 'Temp Subtask ' + Date.now.toString()
+      task: { id: testTaskId, type: 'tasks' },
+      title: 'Temp Subtask ' + Date.now().toString()
     };
     const jsonapi = converters.subtask.serializer.serialize(payload);
     // create a subtask;
@@ -149,11 +185,10 @@ describe("PATCH /subtasks/:id", () => {
   test('It should toggle the status of a subtask', async () => {
     const resp1 = await request(app).get(`/subtasks/${testSubtaskId}`);
     const subtask = await converters.subtask.deserializer.deserialize(resp1.body);
-
     const updatePayload = { id: testSubtaskId, status: !subtask.status };
     const jsonapi = converters.subtask.serializer.serialize(updatePayload);
     const resp2 = await request(app)
-      .patch(`/subtask/${testSubtaskId}`)
+      .patch(`/subtasks/${testSubtaskId}`)
       .set('Content-Type', 'application/vnd.api+json')
       .set('Accept', 'application/vnd.api+json')
       .send(jsonapi);
@@ -161,7 +196,7 @@ describe("PATCH /subtasks/:id", () => {
     expect(resp2.statusCode).toBe(200);
     const newSubtask = await converters.subtask.deserializer.deserialize(resp2.body);
     // origin and new subtasks should have different status.
-    expect(newSubtask.status).toBe(subtask.status);
+    expect(newSubtask.status).toBe(!subtask.status);
   });
 });
 
