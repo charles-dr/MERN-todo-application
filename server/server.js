@@ -7,6 +7,8 @@ const models = require('./models');
 
 const app = express();
 
+// to fix waring: DeprecationWarning: Mongoose: mpromise (mongoose's default promise library) is deprecated
+mongoose.Promise = global.Promise;
 // connect to database
 mongoose.connect(appConfig.dbURL, appConfig.dbOptions, (error) => {
   if (!error) {

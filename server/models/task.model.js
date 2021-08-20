@@ -13,6 +13,7 @@ const schema = mongoose.Schema({
   parent: {
     ref: 'Task',
     type: ObjectId,
+    default: null,
   },
   created_at: {
     type: Date,

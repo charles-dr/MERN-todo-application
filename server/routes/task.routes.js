@@ -3,6 +3,12 @@ const models = require('../models');
 const converters = require('../converters');
 const router = express.Router();
 
+router.route('/:id').get((req, res) => {
+  const { serializer } = converters.task;
+  return models.task.findOne({ _id: req.params.id }).populate('parent')
+    .then(task => res.send(serializer.serialize(task)));
+});
+
 router.route('/').get((req, res) => {
   return models.task.find()
     .then(tasks => {
@@ -13,9 +19,8 @@ router.route('/').get((req, res) => {
 
 router.route('/').post((req, res) => {
   return converters.task.deserializer.deserialize(req.body)
-    .then(task => {
-      return res.json(task);
-    })
+    .then(task => models.task.create(task))
+    .then(task => res.send(converters.task.serializer.serialize(task)));
 });
 
 module.exports = router;

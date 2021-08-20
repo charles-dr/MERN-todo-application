@@ -4,15 +4,20 @@ module.exports = {
   serializer: new Serializer('tasks', {
     topLevelLinks: {
       self: (records) => {
-        // console.log('[records]', records)
-        return 'http://localhost:3200';
+        return records.length !== undefined ? '/tasks' : `/tasks/${records.id}`;
       },
     },
     attributes: [
       'title',
       'status',
+      'parent',
       'created_at',
     ],
+    parent: {
+      ref: 'id',
+      included: true,
+      // attributes: ['status'],
+    },
   }),
   deserializer: new Deserializer({
     tasks: {
