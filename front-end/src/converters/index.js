@@ -15,17 +15,10 @@ export const task = {
     ],
     subtasks: {
       ref: 'id',
-      included: true,
       attributes: ['title', 'status'],
     },
   }),
-  deserializer: new Deserializer({
-    tasks: {
-      valueForRelationship: (relationship) => {
-        return relationship.id
-      },
-    }
-  }),
+  deserializer: new Deserializer({}),
 };
 
 export const subtask = {
@@ -38,12 +31,11 @@ export const subtask = {
     attributes: [
       'title',
       'status',
-      'parent',
+      'task',
       'created_at',
     ],
-    parent: {
+    task: {
       ref: 'id',
-      included: false,
     },
   }),
   deserializer: new Deserializer({
@@ -51,6 +43,6 @@ export const subtask = {
       valueForRelationship: (relationship) => {
         return relationship.id
       },
-    }
+    },
   }),
 };

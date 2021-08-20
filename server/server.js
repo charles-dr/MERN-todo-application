@@ -29,6 +29,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 // routers
 app.use('/tasks', require('./routes/task.routes'));
+app.use('/subtasks', require('./routes/subtask.routes'));
 
 
 app.get('/ping', (req, res) => res.send('Pong!'));
@@ -41,9 +42,9 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  res.render('error', {
+  res.send({
     message: err.message,
-    error: {},
+    error: [ err.message ],
   });
 });
 

@@ -44,7 +44,7 @@ const Task = ({ task, $updateTask }) => {
           <Subtask subtask={subtask} key={i} />
         ))
       }
-      <AddSubtaskForm />
+      <AddSubtaskForm taskId={task.id} />
     </div>
     </>
   );

@@ -15,15 +15,15 @@ module.exports = {
     ],
     subtasks: {
       ref: 'id',
-      included: true,
+      // included: true,
       attributes: ['title', 'status'],
     },
   }),
   deserializer: new Deserializer({
-    tasks: {
+    subtasks: {
       valueForRelationship: (relationship) => {
         return relationship.id
       },
-    }
+    },
   }),
 };

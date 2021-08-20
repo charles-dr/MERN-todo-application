@@ -10,7 +10,7 @@ const schema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  parent: {
+  task: {
     ref: 'Task',
     type: ObjectId,
     default: null,

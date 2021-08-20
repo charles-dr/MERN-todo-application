@@ -10,13 +10,11 @@ module.exports = {
     attributes: [
       'title',
       'status',
-      'parent',
+      'task',
       'created_at',
     ],
-    parent: {
+    task: {
       ref: 'id',
-      included: false,
-      // attributes: ['status'],
     },
   }),
   deserializer: new Deserializer({
@@ -24,6 +22,6 @@ module.exports = {
       valueForRelationship: (relationship) => {
         return relationship.id
       },
-    }
+    },
   }),
 };

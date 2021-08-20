@@ -1,13 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Checkbox, Grid, Typography } from '@material-ui/core';
-import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
-import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 
 import useSubtaskStyles from './useSubtaskStyles';
 
 const Subtask = ({ subtask }) => {
   const classes = useSubtaskStyles();
-  const [showSubTasks, toggleSubtaskShow] = useState(false);
   const handleChange = (e) => {
 
   }

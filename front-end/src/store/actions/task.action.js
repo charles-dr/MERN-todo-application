@@ -6,7 +6,7 @@ import {
 } from '../store.constant';
 import * as api from '../../api';
 
-const loadTaskAndDispatch = (dispatch) => {
+export const loadTaskAndDispatch = (dispatch) => {
   return api.getTasks()
     .then(tasks => dispatch({
       type: LOADED_TASKS,
@@ -24,10 +24,12 @@ export const createTask = (title) => {
 export const loadTasks = () => {
   return async dispatch => {
     return api.getTasks()
-      .then(tasks => dispatch({
+      .then(tasks => {
+        console.log('[Tasks] Loaded', tasks)
+        return dispatch({
         type: LOADED_TASKS,
         payload: tasks,
-      }));
+      })});
   }
 }
 
