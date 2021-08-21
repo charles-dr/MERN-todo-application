@@ -21,7 +21,7 @@ const AddTaskForm = ({ $createTask }) => {
   }
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-testid="addTaskForm" >
         <Grid container spacing={2} justifyContent="space-between" alignItems="center">
           <Grid item xs>
             <FormControl fullWidth={true}>

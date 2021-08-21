@@ -1,20 +1,17 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import '@testing-library/jest-dom';
 
-// import { shallow } from 'enzyme';
-
+import { render, screen } from '../../utils/test-utils';
 import AddTaskForm from './index';
 
-// describe('AddTaskForm', () => {
-//   it('should render correctly in "debug" mode', () => {
-//     const component = shallow(<AddTaskForm debug />);
-//     expect(component).toMatchSnapshot();
-//   });
-// })
+test('AddTaskForm', async () => {
+  render(<AddTaskForm />);
 
-// ref: https://jestjs.io/docs/tutorial-react
-test('AddTaskForm', () => {
-  // const component = renderer.create(<AddTaskForm />);
-  // let tree = component.toJSON();
-  // expect(tree).toMatchSnapshot();
+  expect(screen.getByText(/what to do/i)).toBeInTheDocument();
+  expect(screen.getByRole('button')).toBeInTheDocument();
+  expect(screen.getByRole('textbox')).toBeInTheDocument();
+  expect(screen.getByText(/new list/i)).toBeInTheDocument();
+  expect(screen.getByTestId('addTaskForm')).toBeInTheDocument();
 });
