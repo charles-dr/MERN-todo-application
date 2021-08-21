@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 
 // import { shallow } from 'enzyme';
 
-import AddTaskForm from './index';
+import { DefaultLayout } from './index';
 
 // describe('AddTaskForm', () => {
 //   it('should render correctly in "debug" mode', () => {
@@ -13,8 +13,8 @@ import AddTaskForm from './index';
 // })
 
 // ref: https://jestjs.io/docs/tutorial-react
-test('AddTaskForm', () => {
-  // const component = renderer.create(<AddTaskForm />);
-  // let tree = component.toJSON();
-  // expect(tree).toMatchSnapshot();
+test('DefaultLayout', () => {
+  const component = renderer.create(<DefaultLayout>Default Layout</DefaultLayout>);
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 });

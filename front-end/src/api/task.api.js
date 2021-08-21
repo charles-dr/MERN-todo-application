@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime';
 import { apiInstance } from './index';
 import * as converters from '../converters';
 

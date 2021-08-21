@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DefaultLayout 1`] = `
+<div
+  className="MuiContainer-root container-0-3-1 MuiContainer-maxWidthSm"
+>
+  <h4
+    className="MuiTypography-root title-0-3-2 MuiTypography-h4 MuiTypography-alignCenter MuiTypography-displayBlock"
+  >
+    Todo App
+  </h4>
+  Default Layout
+</div>
+`;

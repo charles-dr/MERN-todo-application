@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 
 // import { shallow } from 'enzyme';
 
-import AddTaskForm from './index';
+import Subtask from './index';
 
 // describe('AddTaskForm', () => {
 //   it('should render correctly in "debug" mode', () => {
@@ -13,8 +13,14 @@ import AddTaskForm from './index';
 // })
 
 // ref: https://jestjs.io/docs/tutorial-react
-test('AddTaskForm', () => {
-  // const component = renderer.create(<AddTaskForm />);
-  // let tree = component.toJSON();
-  // expect(tree).toMatchSnapshot();
+test('Subtask', () => {
+  const subtask = {
+    id: '611f9f34e69585e8689633a4',
+    task: '611f377fe07e47f958cb462e',
+    title: 'Temp subtask',
+    status: false,
+  };
+  const component = renderer.create(<Subtask subtask={subtask} />);
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
 });
