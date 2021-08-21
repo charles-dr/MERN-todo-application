@@ -49,7 +49,8 @@ router.route('/:id').patch((req, res) => {
         models.subtask.updateMany({ task: req.params.id }, { status: attributes.status }),
       ]);
     })
-    .then(([task]) => res.send(converters.task.serializer.serialize(task)));
+    .then(([task]) => models.task.findOne({ _id: task._id }).populate('subtasks'))
+    .then(task => res.send(converters.task.serializer.serialize(task)));
 });
 
 /**
