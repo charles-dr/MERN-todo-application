@@ -22,7 +22,7 @@ const AddSubtaskForm = ({ taskId, $createSubtask }) => {
   }
   return (
     <>
-      <form className={classes.form} onSubmit={handleSubmit}>
+      <form className={classes.form} onSubmit={handleSubmit} data-testid={`addSubtaskForm-${taskId}`}>
         <Grid container spacing={2} justifyContent="space-between" alignItems="flex-end">
           <Grid item xs>
             <FormControl fullWidth={true}>
